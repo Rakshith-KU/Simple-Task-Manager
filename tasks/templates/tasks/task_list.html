@@ -1,28 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Tasks</title>
-</head>
-<body>
-    <h1>Task List</h1>
+{% extends 'base.html' %}
+{% block content %}
 
-    {% if tasks %}
-        <ul>
-            {% for task in tasks %}
-                <li>
-                    <strong>{{ task.title }}</strong> - 
-                    {% if task.completed %}
-                        ✅ Completed
-                    {% else %}
-                        ⏳ Pending
-                    {% endif %}
-                    <br>
-                    Deadline: {{ task.deadline|default:"No deadline" }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No tasks yet.</p>
-    {% endif %}
-</body>
-</html>
+<h2>Dashboard</h2>
+
+<div style="background:#f0f8ff; padding:15px; border-radius:10px; margin-bottom:20px;">
+  <p><strong>Total Tasks:</strong> {{ total_tasks }}</p>
+  <p><strong>✅ Completed:</strong> {{ completed_tasks }}</p>
+  <p><strong>⏳ Pending:</strong> {{ pending_tasks }}</p>
+
+  {% if next_due %}
+    <p><strong>Next Due:</strong> {{ next_due.title }} — {{ next_due.deadline|date:"M d, Y H:i" }} ({{ time_left }})</p>
+  {% else %}
+    <p><em>No upcoming tasks 🎉</em></p>
+  {% endif %}
+</div>
+
+<hr>
+
+<h3>Your Tasks</h3>
+
+{% if tasks %}
+  <ul>
+    {% for task in tasks %}
+      <li>
+        <strong>{{ task.title }}</strong>
+        <br>
+        Due: {{ task.deadline|date:"M d, Y H:i" }}
+        {% if task.completed %}
+          ✅ <em>Completed</em>
+        
+        {% endif %}
+        <br>
+        <a href="{% url 'task_edit' task.pk %}" class="btn btn-secondary">Edit</a>
+        <a href="{% url 'task_delete' task.pk %}" class="btn btn-danger">Delete</a>
+      </li>
+      <hr>
+    {% endfor %}
+  </ul>
+{% else %}
+  
+  <p>No tasks yet. <a href="{% url 'task_create' %}">Add one!</a></p>
+
+{% endif %}
+
+{% endblock %}
