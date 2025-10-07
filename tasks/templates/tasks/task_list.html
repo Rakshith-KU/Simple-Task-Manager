@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Tasks</title>
+</head>
+<body>
+    <h1>Task List</h1>
+
+    {% if tasks %}
+        <ul>
+            {% for task in tasks %}
+                <li>
+                    <strong>{{ task.title }}</strong> - 
+                    {% if task.completed %}
+                        ✅ Completed
+                    {% else %}
+                        ⏳ Pending
+                    {% endif %}
+                    <br>
+                    Deadline: {{ task.deadline|default:"No deadline" }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tasks yet.</p>
+    {% endif %}
+</body>
+</html>
